@@ -63,17 +63,9 @@ git clone https://github.com/your-username/GeoPulse.git
 cd GeoPulse
 ```
 
-### 2. Set Up Data
+### 2. Batteries Included
 
-The data pipeline requires the raw source files. Due to their size, they are not included in this repository.
-
-1. Create the necessary directory structure:
-
-   ```bash
-   mkdir -p data/raw/bloomberg data/raw/sipri data/raw/world_bank
-   ```
-
-2. Place your raw `.csv` files into their corresponding folders within `data/raw/`.
+The data pipeline requires the raw source files included.
 
 ### 3. Build and Run the Application
 
