@@ -36,6 +36,7 @@ The project uses a modern, decoupled architecture, separating the frontend inter
 +------------------+      +---------------------------+      +---------------------+      +-----------------+
        (HTTP)                   (Docker Container)             (Docker Container)        (Python Scripts)
 ```
+
 **Technologies Used:**
 
 - **Backend:** FastAPI, Uvicorn
@@ -68,9 +69,9 @@ The data pipeline requires the raw source files. Due to their size, they are not
 
 1. Create the necessary directory structure:
 
-    ```bash
-    mkdir -p data/raw/bloomberg data/raw/sipri data/raw/world_bank
-    ```
+   ```bash
+   mkdir -p data/raw/bloomberg data/raw/sipri data/raw/world_bank
+   ```
 
 2. Place your raw `.csv` files into their corresponding folders within `data/raw/`.
 
