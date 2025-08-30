@@ -109,7 +109,8 @@ Once the containers are running, you can access the services in your browser:
 
 ## Project Documentation
 
-- **[Architecture Overview](ARCHITECTURE.md):** For a detailed breakdown of the project's evolution, design choices, and multi-phase development roadmap. _(Recommendation: Rename `roadmap.md` to `ARCHITECTURE.md`)_
+- **[Architecture Overview](ARCHITECTURE.md):** For a detailed breakdown of the project's evolution, design choices, and multi-phase development roadmap.
+
 - **[Data Analysis Notebook](notebooks/):** The original Jupyter Notebook containing the exploratory data analysis that inspired this full-stack application.
 
 ## Next Steps
