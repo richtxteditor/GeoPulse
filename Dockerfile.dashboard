@@ -1,0 +1,26 @@
+# --- Build Stage ---
+FROM python:3.9-slim-bookworm AS builder
+RUN apt-get update && apt-get upgrade -y --no-install-recommends
+WORKDIR /app
+COPY requirements.txt .
+RUN pip wheel --no-cache-dir --wheel-dir /app/wheels -r requirements.txt
+
+# --- Final Stage ---
+FROM python:3.9-slim-bookworm
+RUN apt-get update && apt-get upgrade -y --no-install-recommends && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+
+RUN useradd --create-home appuser
+USER appuser
+
+# --- THIS IS THE FIX ---
+# This line was missing or incorrect in your dashboard Dockerfile.
+# It ensures executables installed by pip (like streamlit) can be found.
+ENV PATH="/home/appuser/.local/bin:${PATH}"
+
+COPY --from=builder /app/wheels /wheels
+RUN pip install --no-cache /wheels/*
+COPY --chown=appuser:appuser ./src ./src
+
+EXPOSE 8501
+CMD ["streamlit", "run", "src/dashboard.py", "--server.port=8501", "--server.address=0.0.0.0"]

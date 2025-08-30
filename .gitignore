@@ -1,0 +1,51 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.pyc
+*.pyd
+*.pyo
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+*.egg-info/
+
+# Editors
+.vscode/
+.idea/
+
+# Environments
+.env
+.venv/
+env/
+venv/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+.hypothesis/
+
+# MyPy
+.mypy_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Logs and other output
+*.log
+*.out
+*.err
+
+# OS generated files
+.DS_Store
+thumbs.db
+
+# Data files (if not part of the repository)
+data/processed/
+
+# Specific to this project
+# Add any other files or directories you want to ignore here

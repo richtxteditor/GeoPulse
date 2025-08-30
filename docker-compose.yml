@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  # The FastAPI Backend Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount local src directory for live code reloading during development
+      - ./src:/app/src
+      - ./data:/app/data
+    # --- THIS IS THE FIX ---
+    # Change the command to the "exec form" (a YAML list)
+    command: ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+  # The Streamlit Frontend Service
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile.dashboard
+    ports:
+      - "8501:8501"
+    volumes:
+      # Mount local src directory for live code reloading
+      - ./src:/app/src
+      - ./data:/app/data
+    depends_on:
+      - api # Ensures the API is started before the dashboard (good practice)
