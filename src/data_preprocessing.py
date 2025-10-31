@@ -20,22 +20,42 @@ DATA_CONFIG = {
     "all_arms_imports": {
         "path": "sipri/TIV-Import-All-1950-2022.csv",
         "loader_options": {"index_col": "Arms Category"},
-        "cleaner_func": None
+        "cleaner_func": None,
+        "reshape_config": {
+            "id_vars": ["Arms Category"],
+            "var_name": "Year",
+            "value_name": "Value"
+        }
     },
     "all_arms_exports": {
         "path": "sipri/TIV-Export-All-1950-2022.csv",
         "loader_options": {"index_col": "Arms Category"},
-        "cleaner_func": None
+        "cleaner_func": None,
+        "reshape_config": {
+            "id_vars": ["Arms Category"],
+            "var_name": "Year",
+            "value_name": "Value"
+        }
     },
     "top_200_arms_imports": {
         "path": "sipri/TIV-Import-Top-200-1950-2022.csv",
         "loader_options": {"index_col": "Rank 1950-2022"},
-        "cleaner_func": None
+        "cleaner_func": None,
+        "reshape_config": {
+            "id_vars": ["Rank 1950-2022", "Recipient"],
+            "var_name": "Year",
+            "value_name": "Value"
+        }
     },
     "top_200_arms_exports": {
         "path": "sipri/TIV-Export-Top-200-1950-2022.csv",
         "loader_options": {"index_col": "Rank 1950-2022"},
-        "cleaner_func": None
+        "cleaner_func": None,
+        "reshape_config": {
+            "id_vars": ["Rank 1950-2022", "Supplier"],
+            "var_name": "Year",
+            "value_name": "Value"
+        }
     },
     "bloomberg_defense_industry": {
         "path": "bloomberg/BI_AEROG_1 Defense Industry.csv",
@@ -60,7 +80,12 @@ DATA_CONFIG = {
     "gdp": {
         "path": "world_bank/GDP_1960-2022.csv",
         "loader_options": {}, # No index column for this file initially
-        "cleaner_func": lambda df: clean_gdp_headers(df) # Use a lambda for the specific cleaner
+        "cleaner_func": lambda df: clean_gdp_headers(df), # Use a lambda for the specific cleaner
+        "reshape_config": {
+            "id_vars": ["Country Name", "Country Code", "Series Name", "Series Code"],
+            "var_name": "Year",
+            "value_name": "GDP"
+        }
     }
 }
 
@@ -97,6 +122,15 @@ def clean_gdp_headers(df: pd.DataFrame) -> pd.DataFrame:
     logging.info("GDP headers cleaned successfully.")
     return df
 
+def reshape_to_long(df: pd.DataFrame, id_vars: list, var_name: str, value_name: str) -> pd.DataFrame:
+    """
+    Reshapes a DataFrame from wide to long format.
+    """
+    logging.info(f"Reshaping DataFrame to long format with id_vars={id_vars}...")
+    long_df = df.melt(id_vars=id_vars, var_name=var_name, value_name=value_name)
+    logging.info("DataFrame reshaped successfully.")
+    return long_df
+
 # --- Step 5: Main Orchestration Logic ---
 def preprocess_all_data():
     """
@@ -131,6 +165,12 @@ def preprocess_all_data():
             cleaner_func = config.get('cleaner_func')
             if cleaner_func:
                 df = cleaner_func(df)
+
+            # Reshape the data if a reshape_config is provided
+            reshape_config = config.get('reshape_config')
+            if reshape_config:
+                df = df.reset_index()
+                df = reshape_to_long(df, **reshape_config)
 
             # Store and save the processed dataframe
             processed_data[name] = df
